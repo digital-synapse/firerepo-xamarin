@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace FireRepo.Xamarin
 {
-    public class Nativebase
+    internal  class Nativebase
     {
         public static async Task<T> Get<T>(string name)
         {

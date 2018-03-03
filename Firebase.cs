@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace FireRepo.Xamarin
 {
-    public class Firebase
+    internal class Firebase
     {
         public static void Init(string apiUrl, string apiKey)
         {

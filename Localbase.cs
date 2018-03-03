@@ -15,6 +15,13 @@ namespace FireRepo.Xamarin
 {
     public class Localbase
     {
+        public static void Init(string apiUrl, string apiKey, string[] repos)
+        {
+            Firebase.Init(apiUrl, apiKey);
+            _repos = repos;
+        }
+
+        private static string[] _repos;
         private static Task initTask = null; 
         private static async Task init()
         {
@@ -24,9 +31,12 @@ namespace FireRepo.Xamarin
             if (lastUpdatedRemote > lastUpdatedLocal)
             {
                 await Nativebase.Put("updated", lastUpdatedRemote);
-                //var planets = await Firebase.Get<List<Planet>>("planets");
-                var planets = await Firebase.Get<string>("planets");
-                var ok= await Nativebase.Put("planets", planets);
+
+                foreach (var repo in _repos)
+                {
+                    var data = await Firebase.Get<string>(repo);
+                    var ok = await Nativebase.Put(repo, data);
+                }
             }
         }
         private static Task lazyInit()
