@@ -12,6 +12,7 @@ using Android.Widget;
 using System.Threading.Tasks;
 using Firebase.Xamarin.Database;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace FireRepo.Xamarin
 {
@@ -60,27 +61,8 @@ namespace FireRepo.Xamarin
             return initTask;            
         }
 
-        /*
-        public static async Task<List<T>> GetList<T>(string name)
-        {
-            var ready = await lazyInit();
-
-            var list = new List<T>();
-            if (ready)
-            {
-                try
-                {
-                    var q = client.Child(name);
-                    list = await q.OnceSingleAsync<List<T>>();                    
-                }
-                catch (Exception ex)
-                {
-                    Debugger.Break();
-                }
-            }
-            return list;
-        }
-        */
+        
+       
         public static async Task<T> Get<T>(string name)
         {
             var ready = await lazyInit();
@@ -90,7 +72,7 @@ namespace FireRepo.Xamarin
                 try
                 {
                     var q = client.Child(name);
-                    obj = await q.OnceSingleAsync<T>();
+                    obj= await q.OnceSingleAsync<T>();                                       
                 }
                 catch (Exception ex)
                 {
@@ -99,5 +81,26 @@ namespace FireRepo.Xamarin
             }
             return obj;
         }
+
+        public static async Task<object> Get(string name)
+        {
+            
+            var ready = await lazyInit();
+            object obj = null;
+            if (ready)
+            {
+                try
+                {
+                    var q = client.Child(name);
+                    obj = await q.OnceSingleAsync<object>();                    
+                }
+                catch (Exception ex)
+                {
+                    Debugger.Break();
+                }
+            }
+            return obj;
+        }
+
     }
 }

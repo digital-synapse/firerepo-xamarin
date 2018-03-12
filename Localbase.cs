@@ -25,18 +25,17 @@ namespace FireRepo.Xamarin
         private static Task initTask = null; 
         private static async Task init()
         {
-            var lastUpdatedRemote = await Firebase.Get<DateTime>("updated");
-            var lastUpdatedLocal = await Nativebase.Get<DateTime>("updated");
+            var lastUpdatedRemote = DateTime.Parse( await Firebase.Get<string>("updated"));
+            var lastUpdatedLocal = DateTime.Parse( await Nativebase.Get<string>("updated"));
 
             if (lastUpdatedRemote > lastUpdatedLocal)
             {
-                await Nativebase.Put("updated", lastUpdatedRemote);
-
                 foreach (var repo in _repos)
                 {
-                    var data = await Firebase.Get<string>(repo);
+                    var data = await Firebase.Get(repo);
                     var ok = await Nativebase.Put(repo, data);
                 }
+                await Nativebase.Put("updated", lastUpdatedRemote);
             }
         }
         private static Task lazyInit()
